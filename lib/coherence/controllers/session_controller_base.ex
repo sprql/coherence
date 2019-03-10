@@ -181,7 +181,7 @@ defmodule Coherence.SessionControllerBase do
       def valid_user_login?(%{active: false}, _params), do: false
 
       def valid_user_login?(user, %{"session" => %{"password" => password}}) do
-        user.__struct__.checkpw(password, Map.get(user, Config.password_hash()))
+        user.__struct__.verify_pass(password, Map.get(user, Config.password_hash()))
       end
 
       def valid_user_login?(_user, _params), do: false

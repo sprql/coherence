@@ -104,16 +104,16 @@ defmodule CoherenceTest.Schema do
            ]
   end
 
-  test "checkpw" do
+  test "verify_pass" do
     params = %{name: "test", email: @email, password: "test", password_confirmation: "test"}
     user = Repo.insert!(User.changeset(%User{}, params))
-    assert User.checkpw("test", user.password_hash)
-    refute User.checkpw("t", user.password_hash)
+    assert User.verify_pass("test", user.password_hash)
+    refute User.verify_pass("t", user.password_hash)
   end
 
-  test "checkpw invalid passwords" do
-    refute User.checkpw("", "")
-    refute User.checkpw(nil, nil)
+  test "verify_pass invalid passwords" do
+    refute User.verify_pass("", "")
+    refute User.verify_pass(nil, nil)
   end
 
   test "enforces password" do

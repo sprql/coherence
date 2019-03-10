@@ -47,8 +47,7 @@ defmodule Coherence.Mixfile do
   defp deps do
     [
       {:ecto_sql, "~> 3.0"},
-      {:comeonin, "~> 4.0"},
-      {:bcrypt_elixir, "~> 1.1"},
+      {:bcrypt_elixir, "~> 2.0"},
       {:phoenix, "~> 1.4"},
       {:phoenix_html, "~> 2.12"},
       {:gettext, "~> 0.14"},
@@ -56,11 +55,11 @@ defmodule Coherence.Mixfile do
       {:phoenix_swoosh, "~> 0.2"},
       {:timex, "~> 3.3"},
       {:floki, "~> 0.19", only: :test},
-      {:ex_doc, "~> 0.18.0", only: :dev},
+      {:ex_doc, "~> 0.19.0", only: :dev},
       {:earmark, "~> 1.2", only: :dev, override: true},
       {:postgrex, "~> 0.14.0", only: :test},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false},
-      {:credo, "~> 0.8", only: [:dev, :test]},
+      {:credo, "~> 1.0", only: [:dev, :test]},
       {:plug, "~> 1.7.1"},
       {:jason, "~> 1.0"}
     ]

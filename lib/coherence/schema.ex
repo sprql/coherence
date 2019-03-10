@@ -29,7 +29,7 @@ defmodule Coherence.Schema do
 
   The following functions are available when `authenticatable?/0` returns true:
 
-  * `checkpw/2` - Validate password.
+  * `verify_pass/2` - Validate password.
   * `encrypt_password/1` - encrypted a password using `<password_hashing_alg>.hashpwsalt`
   * `validate_coherence/2` - run the coherence password validations.
   * `validate_password/2` - Used by `validate_coherence for password validation`
@@ -290,18 +290,18 @@ defmodule Coherence.Schema do
 
       if Coherence.Config.has_option(:authenticatable) and
            Keyword.get(unquote(opts), :authenticatable, true) do
-        def checkpw(password, encrypted) do
+        def verify_pass(password, encrypted) do
           try do
-            apply(Config.password_hashing_alg(), :checkpw, [password, encrypted])
+            apply(Config.password_hashing_alg(), :verify_pass, [password, encrypted])
           rescue
             _ -> false
           end
         end
 
-        defoverridable checkpw: 2
+        defoverridable verify_pass: 2
 
         def encrypt_password(password) do
-          apply(Config.password_hashing_alg(), :hashpwsalt, [password])
+          apply(Config.password_hashing_alg(), :hash_pwd_salt, [password])
         end
 
         def validate_coherence(changeset, params) do
@@ -325,13 +325,13 @@ defmodule Coherence.Schema do
           # with true <- current_password_required?,
           #      true <- if(current_password, do: true, else: {:error, "can't be blank"}),
           #      true <-
-          #       if(checkpw(current_password, Map.get(changeset.data, Config.password_hash), do: true, else: "invalid current password") do
+          #       if(verify_pass(current_password, Map.get(changeset.data, Config.password_hash), do: true, else: "invalid current password") do
           if Config.require_current_password() and not is_nil(changeset.data.id) and
                Map.has_key?(changeset.changes, :password) do
             if is_nil(current_password) do
               add_error(changeset, :current_password, Messages.backend().cant_be_blank())
             else
-              if not checkpw(current_password, Map.get(changeset.data, Config.password_hash())) do
+              if not verify_pass(current_password, Map.get(changeset.data, Config.password_hash())) do
                 add_error(
                   changeset,
                   :current_password,

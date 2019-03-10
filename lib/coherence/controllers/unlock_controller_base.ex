@@ -46,7 +46,7 @@ defmodule Coherence.UnlockControllerBase do
 
         user = @schemas.get_user_by_email(email)
 
-        if user != nil and user_schema.checkpw(password, Map.get(user, Config.password_hash())) do
+        if user != nil and user_schema.verify_pass(password, Map.get(user, Config.password_hash())) do
           case LockableService.unlock_token(user) do
             {:ok, user} ->
               if user_schema.locked?(user) do
