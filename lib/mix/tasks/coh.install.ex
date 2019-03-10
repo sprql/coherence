@@ -296,7 +296,7 @@ defmodule Mix.Tasks.Coh.Install do
     """
 
     (config_block <> from_email <> "  opts: #{inspect(config[:opts])}\n")
-    |> swoosh_config(config)
+    |> bamboo_config(config)
     |> add_end_marker
     |> write_config(config)
     |> log_config
@@ -314,17 +314,16 @@ defmodule Mix.Tasks.Coh.Install do
   # defp user_active_field(_),
   #   do: ""
 
-  defp swoosh_config(string, %{web_base: web_base, use_email?: true}) do
+  defp bamboo_config(string, %{web_base: web_base, use_email?: true}) do
     string <>
       "\n" <>
       """
       config :coherence, #{web_base}.Coherence.Mailer,
-        adapter: Swoosh.Adapters.Sendgrid,
-        api_key: "your api key here"
+        adapter: Bamboo.LocalAdapter
       """
   end
 
-  defp swoosh_config(string, _), do: string
+  defp bamboo_config(string, _), do: string
 
   defp add_end_marker(string) do
     string <> "# #{@config_marker_end}\n"
